@@ -1,20 +1,20 @@
-# Fipuzor
+# GuaranteeBox
 * Fakultet informatike u Puli [FIPU](https://fipu.unipu.hr/)
-* Kolegij: [Web aplikacije](https://www.notion.so/Web-aplikacije-7ba8350d498546a78812399024edac44) 
+* Kolegij: [Programsko inženjerstvo](https://fipu.unipu.hr/fipu/predmet/proinz_a) 
 * Mentori: [doc.dr.sc.Nikola Tanković](http://ntankovic.unipu.hr/)
 
 # Sastav tima: 
 * Dino Levak
 
 # Kratki opis funkcionalnosti:
-Ciljana skupina kojoj je Fipuzor namijenjen obuhvaća 
+Ciljana skupina kojoj je GuaranteeBox namijenjen obuhvaća 
 
 # Ideje za mogucnosti          
-           -Spremanje loyalty kartica od trgovina u "trezor"(eng. vault) -> FIPU+trezor=Fipuzor
-           -Prikaz dodanih kartica (Podrska za 10-15 kartica)
-           -Mogućnost resetiranja lozinke (Edit profile)
-           -Dodavanje in-app prijatelja
-           -Dijeljenje kartica s obitelji/prijateljima
+           -Spremanje garancija i racuna
+           -Prikaz dodanih garancija i racuna
+           -Dodavanje info-a o servisu tj. popravku uredaja
+           -Prikaz dodanog info-a o servisu
+           -Unos trajanja garancije i oznacavanje garancije ako je istekla 
 
 
 # Link na javni prototip: 

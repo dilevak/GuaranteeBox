@@ -1,22 +1,23 @@
 <template>
+  <div class="app-container">
+    <img alt="GuaranteeBox Logo" src="../assets/GuaranteeBox_Logo_mid.png">
     <div class="home">
-    <img alt="Fipuzor Logo" src="../assets/logo_fipuzor.png">
   </div>
     <!--Forma za signup i signup botun-->
    <!--Pomocu v-modela cemo bindati input i moći ćemo pohraniti te varijable i pristupiti im kroz kod.-->
   <form name="signup-form">
     <div class="mb-3">
-      <label for="email">Email: </label>
+      <label for="email" class="white-label">Email: </label>
       <input type="email" id="email" v-model="input.email" />
     </div>
     <div class="mb-3">
-      <label for="password">Password: </label>
+      <label for="password" class="white-label">Password: </label>
       <input type="password" id="password" v-model="input.password" />
     </div>
-    <button class="btn btn-outline-success" type="submit" @click.prevent="signup()">
+    <button class="big-button signup-button" type="submit" @click.prevent="signup()">
       Signup
     </button>
-    <p>Already have an account? <router-link to="/login" class="btn btn-primary">Login</router-link></p>
+    <p class="white-text">Already have an account? <router-link to="/login" button class="big-button login-button" >Login</router-link></p>
     
     <!-- Test for printing email/password variables -->
     <!--<p>Email is: {{ input.email }}</p> -->
@@ -25,6 +26,7 @@
     <!-- Display signup status message to the user -->
     <p v-if="signupStatusMessage">{{ signupStatusMessage }}</p>
   </form>
+</div>
 </template>
 
 <script>
@@ -53,3 +55,26 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.white-label {
+  color: white;
+}
+
+.white-text {
+  color: white;
+}
+
+.login-button {
+  background-color: #9E68B4;
+  color: #ffffff; /* boja texta */
+}
+
+/* Styling za Signup botun */
+.signup-button {
+  background-color: #7D3DAF;
+  color: #ffffff; /*Boja texta*/
+}
+
+</style>

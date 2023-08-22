@@ -1,22 +1,26 @@
 <template>
-  <div class="home">
-    <img alt="Fipuzor Logo" src="../assets/logo_fipuzor.png">
-  </div>
+  <div class="app-container">
+    <div class="home">
+      <img alt="GuaranteeBox Logo" src="../assets/GuaranteeBox_Logo_big.png">
+    </div>
   
-  <div class="button-container">
-  <router-link to="/Login" class="big-button login-button">Login</router-link>
-  <router-link to="/Signup" class="big-button signup-button">Signup</router-link>
+    <div class="button-container">
+      <router-link to="/Login" class="big-button login-button">Login</router-link>
+      <router-link to="/Signup" class="big-button signup-button">Signup</router-link>
+    </div>
   </div>
-
 </template>
 
-
-
-<script>
-
-</script>
-
 <style>
+.app-container {
+  background-color: #471AA1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+}
+
 /* Custom styleovi za divove*/
 .button-container {
   display: flex;
@@ -44,14 +48,16 @@
   margin: 5px; /* Adjust this value to control the spacing between buttons */
 }
 
-/* Styling for Login button */
+/* Styling za Login botun */
 .login-button {
-  background-color: #007bff;
+  background-color: #9E68B4;
+  color: #ffffff; /* boja texta */
 }
 
-/* Styling for Signup button */
+/* Styling za Signup botun */
 .signup-button {
-  background-color: #28a745;
+  background-color: #7D3DAF;
+  color: #ffffff; /*Boja texta*/
 }
 </style>
 

@@ -3,27 +3,30 @@
 </head>
 
 <template>
-    <div class="home">
-    <img alt="Fipuzor Logo" src="../assets/logo_fipuzor.png">
+    <div class="login-view">
+      <img alt="GuaranteeBox Logo" src="../assets/GuaranteeBox_Logo_mid.png">
+      <div class="home">
+      
   </div>
   <!--Forma za login i login botun-->
   <!--Pomocu v-modela cemo bindati input i moći ćemo pohraniti te varijable i pristupiti im kroz kod.-->
   <form name="login-form">
-    <div class="mb-3">
-      <label for="username">Username: </label>
-      <input type="text" id="username" v-model="input.username" />
-    </div>
-    <div class="mb-3">
-      <label for="password">Password: </label>
-      <input type="password" id="password" v-model="input.password" />
-    </div>
-    <button class="btn btn-primary" type="submit" @click.prevent="login()">Login</button>
+      <div class="mb-3">
+        <label for="username" class="white-label">Username: </label>
+        <input type="text" id="username" v-model="input.username" />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="white-label">Password: </label>
+        <input type="password" id="password" v-model="input.password" />
+      </div>
+    <button class="big-button login-button" type="submit" @click.prevent="login()">Login</button>
 
-    <p>Don't have an account yet? <router-link to="/Signup" class="btn btn-success" exact>Signup</router-link></p>
+    <p class="white-text">Don't have an account yet? <router-link to="/Signup" class="big-button signup-button" exact>Signup</router-link></p>
     
     <!-- Prikaz login status poruke korisniku -->
     <p v-if="loginStatusMessage">{{ loginStatusMessage }}</p>
   </form>
+</div>
 </template>
 
 <script>
@@ -55,3 +58,34 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.login-view {
+  background-color: #471AA1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.white-label {
+  color: white;
+}
+
+.white-text {
+  color: white;
+}
+
+.login-button {
+  background-color: #9E68B4;
+  color: #ffffff; /* boja texta */
+}
+
+/* Styling za Signup botun */
+.signup-button {
+  background-color: #7D3DAF;
+  color: #ffffff; /*Boja texta*/
+}
+
+</style>
