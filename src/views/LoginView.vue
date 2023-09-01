@@ -12,8 +12,8 @@
   <!--Pomocu v-modela cemo bindati input i moći ćemo pohraniti te varijable i pristupiti im kroz kod.-->
   <form name="login-form">
       <div class="mb-3">
-        <label for="username" class="white-label">Username: </label>
-        <input type="text" id="username" v-model="input.username" />
+        <label for="email" class="white-label">Email: </label>
+        <input type="text" id="email" v-model="input.email" />
       </div>
       <div class="mb-3">
         <label for="password" class="white-label">Password: </label>
@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       input: {
-        username: '',
+        email: '',
         password: '',
       },
       loginStatusMessage: '', //Za spremanje login status poruke
@@ -44,15 +44,15 @@ export default {
   },
   methods: {
     login() {
-      // Make sure both username and password are not empty
-      if (this.input.username !== '' && this.input.password !== '') {
+      // Make sure both email and password are not empty
+      if (this.input.email !== '' && this.input.password !== '') {
         console.log('authenticated');
         this.loginStatusMessage = ''; //Ne prikazivanje "authenticated" statusa useru
 
         this.$router.push('/dashboard'); //Routaj na dashboard nakon successful logina
       } else {
-        console.log('Username and Password cannot be empty');
-        this.loginStatusMessage = 'Username and Password cannot be empty'; // Greska koja se ispisuje korisniku
+        console.log('email and Password cannot be empty');
+        this.loginStatusMessage = 'email and Password cannot be empty'; // Greska koja se ispisuje korisniku
       }
     },
   },

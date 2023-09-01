@@ -21,7 +21,7 @@
         <label for="confirmPassword" class="white-label">Confirm Password:</label>
         <input type="password" id="confirmPassword" v-model="input.confirmPassword" />
       </div>
-      <button class="big-button signup-button" type="submit" @click.prevent="signup()">
+      <button class="big-button signup-button" type="button" @click.prevent="signup()">
         Signup
       </button>
       <p class="white-text">Already have an account? <router-link to="/login" button class="big-button login-button" >Login</router-link></p>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { firebase } from '@/firebase';
+
 export default {
   name: 'SignupView',
   data() {
@@ -48,7 +50,7 @@ export default {
   },
   methods: {
     signup() {
-      // Make sure all fields are not empty
+      //Provjera da nije prazo
       if (
         this.input.username !== '' &&
         this.input.email !== '' &&
@@ -56,8 +58,17 @@ export default {
         this.input.confirmPassword !== ''
       ) {
         if (this.input.password === this.input.confirmPassword) {
-          console.log('Registered');
-          this.signupStatusMessage = ''; //Ne prikazujemo nista korisniku ako je uspjesno
+      firebase.auth().createUserWithEmailAndPassword(this.input.email, this.input.password)
+        .then(() => {
+          this.signupStatusMessage = 'Registracija uspjesna';
+          setTimeout(() => { //Kratki delay da se stigne procitat poruka
+              this.$router.push('/login');
+            }, 1000); //milisekunde
+        })
+        .catch((error) => {
+          console.error("Doslo je do greske", error);
+          this.signupStatusMessage = error.message; //Prikaz errora
+        });
         } else {
           console.log('Passwords do not match');
           this.signupStatusMessage = 'Passwords do not match'; //Prikazujemo ako lozinke nisu iste
@@ -66,7 +77,9 @@ export default {
         console.log('All fields are required');
         this.signupStatusMessage = 'All fields are required'; //Prikazujemo ako sva polja nisu ispunjena
       }
+    
     },
+
   },
 };
 </script>
