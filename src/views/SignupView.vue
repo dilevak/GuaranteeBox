@@ -2,31 +2,34 @@
   <div class="app-container">
     <img alt="GuaranteeBox Logo" src="../assets/GuaranteeBox_Logo_mid.png">
     <div class="home">
-  </div>
-    <!--Forma za signup i signup botun-->
-   <!--Pomocu v-modela cemo bindati input i moći ćemo pohraniti te varijable i pristupiti im kroz kod.-->
-  <form name="signup-form">
-    <div class="mb-3">
-      <label for="email" class="white-label">Email: </label>
-      <input type="email" id="email" v-model="input.email" />
     </div>
-    <div class="mb-3">
-      <label for="password" class="white-label">Password: </label>
-      <input type="password" id="password" v-model="input.password" />
-    </div>
-    <button class="big-button signup-button" type="submit" @click.prevent="signup()">
-      Signup
-    </button>
-    <p class="white-text">Already have an account? <router-link to="/login" button class="big-button login-button" >Login</router-link></p>
-    
-    <!-- Test for printing email/password variables -->
-    <!--<p>Email is: {{ input.email }}</p> -->
-    <!--<p>Password is: {{ input.password }}</p> -->
+     <!--Forma za signup i signup botun-->
+    <form name="signup-form">
+      <div class="mb-3">
+        <label for="username" class="white-label">Username:</label>
+        <input type="text" id="username" v-model="input.username" />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="white-label">Email:</label>
+        <input type="email" id="email" v-model="input.email" />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="white-label">Password:</label>
+        <input type="password" id="password" v-model="input.password" />
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="white-label">Confirm Password:</label>
+        <input type="password" id="confirmPassword" v-model="input.confirmPassword" />
+      </div>
+      <button class="big-button signup-button" type="submit" @click.prevent="signup()">
+        Signup
+      </button>
+      <p class="white-text">Already have an account? <router-link to="/login" button class="big-button login-button" >Login</router-link></p>
 
-    <!-- Display signup status message to the user -->
-    <p v-if="signupStatusMessage">{{ signupStatusMessage }}</p>
-  </form>
-</div>
+      <!-- Prikaz signupStatusMessage u bijeloj boji korisniku  -->
+      <p v-if="signupStatusMessage" class="white-text">{{ signupStatusMessage }}</p>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -35,21 +38,33 @@ export default {
   data() {
     return {
       input: {
+        username: '',
         email: '',
         password: '',
+        confirmPassword: '',
       },
-      signupStatusMessage: '', // To store the signup status message
+      signupStatusMessage: '', //Za spremanje status poruke
     };
   },
   methods: {
     signup() {
-      // Make sure both email and password are not empty
-      if (this.input.email !== '' && this.input.password !== '') {
-        console.log('registered');
-        this.signupStatusMessage = ''; // Don't display the "registered" status to the user
+      // Make sure all fields are not empty
+      if (
+        this.input.username !== '' &&
+        this.input.email !== '' &&
+        this.input.password !== '' &&
+        this.input.confirmPassword !== ''
+      ) {
+        if (this.input.password === this.input.confirmPassword) {
+          console.log('Registered');
+          this.signupStatusMessage = ''; //Ne prikazujemo nista korisniku ako je uspjesno
+        } else {
+          console.log('Passwords do not match');
+          this.signupStatusMessage = 'Passwords do not match'; //Prikazujemo ako lozinke nisu iste
+        }
       } else {
-        console.log('Email and Password cannot be empty');
-        this.signupStatusMessage = 'Email and Password cannot be empty'; // Error message displayed to the user
+        console.log('All fields are required');
+        this.signupStatusMessage = 'All fields are required'; //Prikazujemo ako sva polja nisu ispunjena
       }
     },
   },
