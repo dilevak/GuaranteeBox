@@ -19,7 +19,7 @@
         <label for="password" class="white-label">Password: </label>
         <input type="password" id="password" v-model="input.password" />
       </div>
-    <button class="big-button login-button" type="submit" @click.prevent="login()">Login</button>
+    <button class="big-button login-button" type="button" @click.prevent="login()">Login</button>
 
     <p class="white-text">Don't have an account yet? <router-link to="/Signup" class="big-button signup-button" exact>Signup</router-link></p>
     
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { firebase } from '@/firebase';
 
 export default {
   name: 'LoginView',
@@ -46,10 +47,13 @@ export default {
     login() {
       // Make sure both email and password are not empty
       if (this.input.email !== '' && this.input.password !== '') {
-        console.log('authenticated');
-        this.loginStatusMessage = ''; //Ne prikazivanje "authenticated" statusa useru
-
-        this.$router.push('/dashboard'); //Routaj na dashboard nakon successful logina
+        firebase.auth().signInWithEmailAndPassword(this.input.email, this.input.password)
+        .then(() => {
+          this.loginStatusMessage = 'Uspjesna prijava]',
+          this.$router.push('/dashboard'); //Routaj na dashboard nakon successful logina;
+        }).catch((error) => {
+          console.error('Greska',error)
+        });
       } else {
         console.log('email and Password cannot be empty');
         this.loginStatusMessage = 'email and Password cannot be empty'; // Greska koja se ispisuje korisniku
