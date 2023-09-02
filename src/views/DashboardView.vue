@@ -11,7 +11,7 @@
       <a href="#" @click="openAddForm">Add New</a>
       <a href="#" @click="logout()">Logout</a>
     </Slide>
-    <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" />
+    <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" @guaranteeReceiptAdded="closeAddForm" />
     <div class="dashboard">
       <div class="guarantees-container">
         <h3>Added Guarantees</h3>
@@ -61,7 +61,11 @@ export default {
     },
     hideAddForm() {
       this.showAddForm = false;
-  }
+  },
+  closeAddForm() {
+      //Zatvori formu nakon uspjesnog dodavanja u bazu
+      this.showAddForm = false;
+    },
 }
 };
 </script>
