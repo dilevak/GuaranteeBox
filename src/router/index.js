@@ -23,7 +23,8 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: DashboardView
+    component: DashboardView,
+    props: (route) => ({ logout: route.params.logout })
   }
 ]
 

@@ -1,17 +1,40 @@
 <template>
 
 <router-view/>
+
+<div>
+  <router-view :logout="logout" />
+</div>
   
- </template>
+</template>
 
 <script>
+import { firebase } from '@/firebase';
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    console.log(user.email);
+  } else {
+    //User not signed in
+    console.log('No User');
+  }
+});
 
 export default {
   name: 'App',
   components: {
 
   },
-
+  methods: {
+    logout(){
+      firebase.auth()
+      .signOut()
+      .then(() => {
+          this.$router.push('/login');
+    });
+  }
+}
 };
 </script>
 

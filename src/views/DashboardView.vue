@@ -11,6 +11,7 @@
         <span>Home</span>
       </a>
       <a href="#" @click="openAddForm">Add Guarantee & Receipt</a>
+      <a href="#" @click="logout()">Logout</a>
     </Slide>
     <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" />
     <div class="dashboard">
@@ -41,6 +42,7 @@ import AddGuaranteeReceipt from "@/components/AddGuaranteeReceipt.vue"; // Impor
 
 export default {
   name: 'DashboardView',
+  props: ['logout'],
   components: {
     Slide,
     AddGuaranteeReceipt,

@@ -50,7 +50,7 @@ export default {
         firebase.auth().signInWithEmailAndPassword(this.input.email, this.input.password)
         .then(() => {
           this.loginStatusMessage = 'Uspjesna prijava]',
-          this.$router.push('/dashboard'); //Routaj na dashboard nakon successful logina;
+          this.$router.replace('/dashboard'); //Routaj na dashboard nakon successful logina;
         }).catch((error) => {
           console.error('Greska',error)
         });
