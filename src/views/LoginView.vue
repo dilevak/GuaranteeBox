@@ -24,7 +24,7 @@
     <p class="white-text">Don't have an account yet? <router-link to="/Signup" class="big-button signup-button" exact>Signup</router-link></p>
     
     <!-- Prikaz login status poruke korisniku -->
-    <p v-if="loginStatusMessage">{{ loginStatusMessage }}</p>
+    <p v-if="loginStatusMessage" class="white-text">{{ loginStatusMessage }}</p>
   </form>
 </div>
 </template>
@@ -49,10 +49,11 @@ export default {
       if (this.input.email !== '' && this.input.password !== '') {
         firebase.auth().signInWithEmailAndPassword(this.input.email, this.input.password)
         .then(() => {
-          this.loginStatusMessage = 'Uspjesna prijava]',
+          this.loginStatusMessage = 'Uspjesna prijava';
           this.$router.replace('/dashboard'); //Routaj na dashboard nakon successful logina;
         }).catch((error) => {
           console.error('Greska',error)
+          this.loginStatusMessage = error;
         });
       } else {
         console.log('email and Password cannot be empty');

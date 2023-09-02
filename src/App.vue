@@ -1,25 +1,32 @@
 <template>
-
-<router-view/>
-
 <div>
   <router-view :logout="logout" />
 </div>
-  
 </template>
 
 <script>
 import { firebase } from '@/firebase';
+import store from '@/store';
+import router from '@/router'; 
 
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
+  console.log('Firebase Auth State Changed:', user);
+  const currentRoute = router.currentRoute;
   if (user) {
-    // User is signed in.
-    console.log(user.email);
+    console.log('User is signed in:', user.email);
+    store.currentUser = user.email;
+    if (!currentRoute.meta.needsUser) {
+      router.push({ name: 'dashboard' });
+    }
   } else {
-    //User not signed in
-    console.log('No User');
+    console.log('User not signed in');
+    store.currentUser = null;
+    if (currentRoute.meta.needsUser) {
+      router.push({ name: 'login' });
+    }
   }
 });
+
 
 export default {
   name: 'App',

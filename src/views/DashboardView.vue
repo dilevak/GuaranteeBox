@@ -2,15 +2,13 @@
   <div class="logo-container">
     <img alt="GuaranteeBox Logo" class="logo" src="../assets/GuaranteeBox_Logo.png">
     <div class="welcome">
-      <h2>Welcome to GuaranteeBox</h2>
+      <h2>Welcome to GuaranteeBox {{ currentUser }}</h2>
     </div>
   </div>
   <div class="dashboard-view">
     <Slide noOverlay>
-      <a id="home" href="#">
-        <span>Home</span>
-      </a>
-      <a href="#" @click="openAddForm">Add Guarantee & Receipt</a>
+      <a id="home" href="#">About</a>
+      <a href="#" @click="openAddForm">Add New</a>
       <a href="#" @click="logout()">Logout</a>
     </Slide>
     <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" />
@@ -38,7 +36,7 @@
 <script>
 import { Slide } from 'vue3-burger-menu';
 import AddGuaranteeReceipt from "@/components/AddGuaranteeReceipt.vue"; // Importanje AddGuaranteeReceipt komponente
-
+import store from '@/store';
 
 export default {
   name: 'DashboardView',
@@ -51,6 +49,11 @@ export default {
     return {
       showAddForm: false,
     };
+  },
+  computed: {
+    currentUser() {
+      return store.currentUser;
+    },
   },
   methods: {
     openAddForm() {
