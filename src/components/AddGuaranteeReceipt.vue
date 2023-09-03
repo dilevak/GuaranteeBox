@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { db, storage } from '@/firebase';
+import { db, storage, auth } from '@/firebase';
 
 export default {
   name: 'AddGuaranteeReceipt',
@@ -36,11 +36,18 @@ export default {
   },
   methods: {
     async addGuaranteeReceipt() {
-      let addedDocument; // Declare the variable here
+      let addedDocument;
       try {
         if (!this.guaranteePicture || !this.receiptPicture) {
           console.error('Guarantee or receipt picture is missing.');
           return;
+        }
+        //Dobivanje user UID-a trenutno logiranog korisnika s firebase-a
+        const user = auth.currentUser; //Trenutno logiran user
+        console.log('User UID:', user ? user.uid : 'Not authenticated'); //provera ako radi
+        if (!user) {
+        console.error('User is not authenticated.');
+        return;
         }
 
         //Uplodanje slike garancije u Firebase Storage
@@ -68,6 +75,7 @@ export default {
           expireDate: this.expireDate,
           guaranteePicture: guaranteePictureURL,
           receiptPicture: receiptPictureURL,
+          userId: user.uid,
         });
 
         //ID dodanog dokumenta
