@@ -12,24 +12,23 @@
       <a href="#" @click="logout()">Logout</a>
     </Slide>
     <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" @guaranteeReceiptAdded="closeAddForm" />
-    <div class="dashboard">
-      <div class="guarantees-container">
-        <h3>Added Guarantees</h3>
-        <ul>
-          <li v-for="(item, index) in addedItems" :key="index" @click="openPopup(item)">
-            <div class="guarantee-item">
-              <div class="guarantee-info">
-                <p>Name: {{ item.name }}</p>
-                <p>Expiration Date: {{ item.expireDate }}</p>
-              </div>
-            </div>
-          </li>
-        </ul>
+ 
+    <div class="guarantees-container">
+      <h3>Added Guarantees</h3>
+      <div class="guarantee-list">
+        <div class="guarantee-item" v-for="(item, index) in addedItems" :key="index" @click="openPopup(item)">
+          <div class="guarantee-info">
+            <p>Name: {{ item.name }}</p>
+            <p>Expiration Date: {{ item.expireDate }}</p>
+          </div>
+        </div>
       </div>
     </div>
+  
+
   </div>
   <!--Popup prozor koji se otvara nakon klika na garanciju sa slikama garancije i racuna-->
-  <div class="popup" v-if="isPopupOpen">
+  <div class="popup-details" v-if="isPopupOpen">
     <div class="popup-content">
       <h3>{{ selectedGuarantee.name }}</h3>
       <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
@@ -135,10 +134,10 @@ export default {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  text-align: center; /* Center the content */
+  text-align: center;
   margin-top: 20px;
-  max-width: 80%; /* Limit the width to make it centered */
-  margin: 20px auto; /* Center the container */
+  max-width: 80%;
+  margin: 20px auto;
 }
 .dashboard-view {
   background-color: #471AA1;
@@ -165,5 +164,45 @@ export default {
 .logo {
   width: 80px;
   height: auto;
+}
+  .guarantee-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #471AA1;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .guarantee-item {
+    flex-basis: calc(25% - 10px); /*Prikaz garancija u redu od 4*/
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px; 
+  }
+  .popup-details {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /*Poluprozirna pozadina*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 80%; 
+  max-height: 80%;
+  overflow-y: auto;
 }
 </style>
