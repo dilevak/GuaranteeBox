@@ -16,9 +16,9 @@
     <div class="guarantees-container">
       <h3>Added Guarantees</h3>
       <div class="guarantee-list">
-        <div class="guarantee-item" v-for="(item, index) in addedItems" :key="index" @click="openPopup(item)">
+        <div class="guarantee-item" v-for="(item, index) in addedItems" :key="index" @click="openPopup(item)" :class="{ expired: isExpired(item.expireDate) }">
           <div class="guarantee-info">
-            <p>Name: {{ item.name }}</p>
+            <p>Name: {{ item.name }} {{ isExpired(item.expireDate) ? ' (Expired)' : '' }}</p>
             <p>Expiration Date: {{ item.expireDate }}</p>
           </div>
         </div>
@@ -63,11 +63,18 @@ export default {
     };
   },
   computed: {
-    currentUser() {
-      return store.currentUser;
-    },
+  currentUser() {
+    return store.currentUser;
   },
+},
+
   methods: {
+    isExpired(expireDate) {
+      const currentDate = new Date();
+      const guaranteeExpireDate = new Date(expireDate);
+      return guaranteeExpireDate < currentDate;
+    },
+
     openAddForm() {
       this.showAddForm = true;
     },
@@ -205,4 +212,10 @@ export default {
   max-height: 80%;
   overflow-y: auto;
 }
+
+.expired {
+  border: 5px solid red;
+  background-color: white;
+}
+
 </style>
