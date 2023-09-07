@@ -18,7 +18,7 @@ Ciljana skupina kojoj je GuaranteeBox namijenjen obuhvaća
 
 
 # Link na javni prototip: 
-Figma link
+https://www.figma.com/file/8Lf1R8qnMdFZ2151Q3VVyL/GuaranteeBox?type=design&node-id=0%3A1&mode=design&t=Mvs9kk3PYq5P9D42-1
 
 # Postavljanje projekta
 
