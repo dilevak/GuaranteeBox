@@ -30,6 +30,8 @@
   <!--Popup prozor koji se otvara nakon klika na garanciju sa slikama garancije i racuna-->
   <div class="popup-details" v-if="isPopupOpen">
     <div class="popup-content">
+      <!--Delete botun-->
+      <button @click="openDeleteDialog(selectedGuarantee)">Delete</button>
       <h3>{{ selectedGuarantee.name }}</h3>
       <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
       <div class="popup-images">
@@ -45,7 +47,7 @@
 import { Slide } from 'vue3-burger-menu';
 import AddGuaranteeReceipt from "@/components/AddGuaranteeReceipt.vue"; // Importanje AddGuaranteeReceipt komponente
 import store from '@/store';
-import { db, auth } from '@/firebase';
+import { db, auth, storage } from '@/firebase';
 
 export default {
   name: 'DashboardView',
@@ -60,6 +62,8 @@ export default {
       addedItems: [], //Array za spremanje povucenih podataka iz baze
       selectedGuarantee: null, //Za pracenje odabrane garancije, u nju se sprema kad se klikne na garanciju
       isPopupOpen: false, //Za pracenje da li je garancija otvorena ili zatvorena
+      showDeleteDialog: false, // Control whether the delete dialog is displayed or not
+      deletingGuarantee: null, // Store the guarantee to be deleted
     };
   },
   computed: {
@@ -69,6 +73,16 @@ export default {
 },
 
   methods: {
+    // Open the delete dialog and set the guarantee to be deleted
+    openDeleteDialog(guarantee) {
+      this.deletingGuarantee = guarantee;
+      this.showDeleteDialog = true;
+    },
+
+    // Close the delete dialog
+    closeDeleteDialog() {
+      this.showDeleteDialog = false;
+    },
     isExpired(expireDate) {
       const currentDate = new Date();
       const guaranteeExpireDate = new Date(expireDate);
@@ -127,6 +141,59 @@ export default {
         console.error('Error kod povlacenja user-specific garancija:', error);
       }
     },
+    
+    async deleteGuarantee() {
+  try {
+    //check da li je korisnik autenticiran
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error('DELETE: User is not authenticated.');
+      return;
+    }
+
+    if (!this.deletingGuarantee || !this.deletingGuarantee.id) {
+      console.error('Invalid guarantee to delete.');
+      return;
+    }
+
+    console.log('Deleting guarantee with ID:', this.deletingGuarantee.id);
+
+    //Brisanje iz firestora Firestore
+    await db.collection('guarantees').doc(this.deletingGuarantee.id).delete();
+
+    //Azuriraj addedItems listu za micanje obrisane garancije
+    this.addedItems = this.addedItems.filter(item => item.id !== this.deletingGuarantee.id);
+
+    console.log('Guarantee removed from addedItems.');
+
+    //Zatvaranje delete dialoga
+    this.showDeleteDialog = false;
+
+    // Refresh the guarantee list by fetching the user's guarantees
+    await this.fetchUserGuarantees();
+    console.log('Guarantees list refreshed.');
+
+  
+
+    //Brisanje slika garancije
+    if (this.deletingGuarantee.guaranteePicture) {
+      const guaranteePictureRef = storage.refFromURL(this.deletingGuarantee.guaranteePicture);
+      await guaranteePictureRef.delete();
+      console.log('Guarantee picture deleted.');
+    }
+
+    //Brisanje slika racuna
+    if (this.deletingGuarantee.receiptPicture) {
+      const receiptPictureRef = storage.refFromURL(this.deletingGuarantee.receiptPicture);
+      await receiptPictureRef.delete();
+      console.log('Receipt picture deleted.');
+    }
+  } catch (error) {
+    console.error('Error deleting guarantee:', error);
+  }
+}
+
   },
   mounted() {
     console.log('Component is mounted');
