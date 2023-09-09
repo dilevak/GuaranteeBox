@@ -12,26 +12,28 @@
       <a href="#" @click="logout()">Logout</a>
     </Slide>
     <AddGuaranteeReceipt v-if="showAddForm" @closeAddForm="hideAddForm" @guaranteeReceiptAdded="closeAddForm" />
- 
+
     <div class="guarantees-container">
       <h3>Added Guarantees</h3>
       <div class="guarantee-list">
-        <div class="guarantee-item" v-for="(item, index) in addedItems" :key="index" @click="openPopup(item)" :class="{ expired: isExpired(item.expireDate) }">
+        <div class="guarantee-item" v-for="(item, index) in addedItems" :key="index" :class="{ expired: isExpired(item.expireDate) }">
           <div class="guarantee-info">
+            <div @click="openPopup(item)" style="cursor: pointer;">
             <p>Name: {{ item.name }} {{ isExpired(item.expireDate) ? ' (Expired)' : '' }}</p>
+            </div>
             <p>Expiration Date: {{ item.expireDate }}</p>
           </div>
         </div>
       </div>
+     <!-- <DeleteGuarantee
+    v-if="showDeleteDialog"
+    @deleteGuaranteeConfirmed="deleteConfirmed"
+    @cancelDelete="cancelDelete"/>-->
     </div>
-  
-
   </div>
   <!--Popup prozor koji se otvara nakon klika na garanciju sa slikama garancije i racuna-->
   <div class="popup-details" v-if="isPopupOpen">
     <div class="popup-content">
-      <!--Delete botun-->
-      <button @click="openDeleteDialog(selectedGuarantee)">Delete</button>
       <h3>{{ selectedGuarantee.name }}</h3>
       <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
       <div class="popup-images">
@@ -39,8 +41,12 @@
         <img v-if="selectedGuarantee.receiptPicture" :src="selectedGuarantee.receiptPicture" alt="Receipt Picture">
       </div>
       <button @click="closePopup">Close</button>
+      <!--Delete botun-->
+      <DeleteGuarantee @deleteClicked="openDeleteDialog(item)"/>
     </div>
   </div>
+  
+
 </template>
 
 <script>
@@ -48,6 +54,7 @@ import { Slide } from 'vue3-burger-menu';
 import AddGuaranteeReceipt from "@/components/AddGuaranteeReceipt.vue"; // Importanje AddGuaranteeReceipt komponente
 import store from '@/store';
 import { db, auth, storage } from '@/firebase';
+import DeleteGuarantee from '@/components/DeleteGuarantee.vue';
 
 export default {
   name: 'DashboardView',
@@ -55,6 +62,7 @@ export default {
   components: {
     Slide,
     AddGuaranteeReceipt,
+    DeleteGuarantee,
   },
   data() {
     return {
@@ -62,10 +70,10 @@ export default {
       addedItems: [], //Array za spremanje povucenih podataka iz baze
       selectedGuarantee: null, //Za pracenje odabrane garancije, u nju se sprema kad se klikne na garanciju
       isPopupOpen: false, //Za pracenje da li je garancija otvorena ili zatvorena
-      showDeleteDialog: false, // Control whether the delete dialog is displayed or not
-      deletingGuarantee: null, // Store the guarantee to be deleted
+      showDeleteDialog: false, // Delete dialog
+      deletingGuarantee: null, //Spremanje garancije za brisanje
     };
-  },
+    },
   computed: {
   currentUser() {
     return store.currentUser;
@@ -73,13 +81,25 @@ export default {
 },
 
   methods: {
-    // Open the delete dialog and set the guarantee to be deleted
+
+    deleteConfirmed() {
+    //Brisanje garancije
+    this.deleteGuarantee();
+    },
+
+    //Canceliranje brisanja
+    cancelDelete() {
+    this.showDeleteDialog = false;
+    },
+
+    //Otvoranje delete dialoga i postavljanje garancije za brisanje
     openDeleteDialog(guarantee) {
+      console.log('Test delete dialog za:', guarantee);
       this.deletingGuarantee = guarantee;
       this.showDeleteDialog = true;
     },
 
-    // Close the delete dialog
+    //Zatvaranje delete dialoga
     closeDeleteDialog() {
       this.showDeleteDialog = false;
     },
