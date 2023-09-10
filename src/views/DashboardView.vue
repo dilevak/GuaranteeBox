@@ -36,17 +36,22 @@
   <div class="popup-content">
     <h3>{{ selectedGuarantee.name }}</h3>
     <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
+
+    <template v-if="selectedGuarantee.serviceNote">
+      <p style="font-size: 16px;">Service Note: {{ selectedGuarantee.serviceNote }}</p>
+    </template>
+    <template v-else>
+      <p style="font-size: 16px;">Service Note: No service note added</p>
+    </template>
+
     <div class="popup-images">
       <img v-if="selectedGuarantee.guaranteePicture" :src="selectedGuarantee.guaranteePicture" alt="Guarantee Picture">
       <img v-if="selectedGuarantee.receiptPicture" :src="selectedGuarantee.receiptPicture" alt="Receipt Picture">
     </div>
-    <!--Input polje za service note-->
-    <div class="service-note">
-    <h4>Service Note:</h4>
-    <textarea v-model="serviceNote"></textarea>
-    </div>
     <!-- AddServiceNote botun -->
-    <button @click="addServiceNote">Add Service Note</button>
+    <AddServiceNote :guarantee="selectedGuarantee" v-model="serviceNote" />
+      <!--  <button @click="addServiceNote">Add Service Note</button> -->
+
 
     <button @click="closePopup">Close</button>
       <!--Delete botun-->
@@ -63,6 +68,7 @@ import AddGuaranteeReceipt from "@/components/AddGuaranteeReceipt.vue"; // Impor
 import store from '@/store';
 import { db, auth, storage } from '@/firebase';
 import DeleteGuarantee from '@/components/DeleteGuarantee.vue';
+import AddServiceNote from '@/components/AddServiceNote.vue';
 
 export default {
   name: 'DashboardView',
@@ -71,6 +77,7 @@ export default {
     Slide,
     AddGuaranteeReceipt,
     DeleteGuarantee,
+    AddServiceNote,
   },
   data() {
     return {
@@ -80,6 +87,7 @@ export default {
       isPopupOpen: false, //Za pracenje da li je garancija otvorena ili zatvorena
       showDeleteDialog: false, // Delete dialog
       deletingGuarantee: null, //Spremanje garancije za brisanje
+      serviceNote: '',
     };
     },
   computed: {
@@ -89,12 +97,23 @@ export default {
 },
 
   methods: {
+
     addServiceNote() {
     console.log('POZVANA je metoda addServiceNote');
-    if (this.selectedGuarantee) {
+    console.log('Ime GARANCIJE je!!:', this.selectedGuarantee.name);
+      if (this.selectedGuarantee) {
       this.selectedGuarantee.serviceNote = this.serviceNote; //Updateaj serviceNote za selectedguarantee
-    }
-  },
+      this.$emit('serviceNoteAdded');
+      }
+    },
+
+    updateServiceNote(value) {
+      this.serviceNote = value;
+    },
+
+    serviceNoteAdded() {
+      this.isPopupOpen = false;
+    },
 
     deleteConfirmed() {
     //Brisanje garancije
@@ -130,8 +149,9 @@ export default {
       this.showAddForm = false;
     },
   closeAddForm() {
-      //Zatvori formu nakon uspjesnog dodavanja u bazu
+      //Zatvori formu nakon uspjesnog dodavanja u bazu i refreshaj garancije
       this.showAddForm = false;
+      this.fetchUserGuarantees();
     },
 
 //Pregled garancija    
@@ -167,6 +187,7 @@ export default {
             expireDate: data.expireDate,
             guaranteePicture: data.guaranteePicture,
             receiptPicture: data.receiptPicture,
+            serviceNote: data.serviceNote,
           });
         });
         console.log('Povucene garancije:', guarantees); //Provjera povucenih garancija iz baze
@@ -176,7 +197,7 @@ export default {
       }
     },
     
-    async deleteGuarantee() {
+  async deleteGuarantee() {
   try {
     //check da li je korisnik autenticiran
     const user = auth.currentUser;

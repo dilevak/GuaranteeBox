@@ -2,6 +2,7 @@
     <div>
       <textarea v-model="serviceNote" rows="4" cols="50" placeholder="Add service note"></textarea>
       <button @click="saveServiceNote">Save Service Note</button>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </div>
   </template>
   
@@ -10,37 +11,40 @@
   
   export default {
     props: {
-      guarantee: Object, //Odabrana garancija
+      guarantee: Object,
+ 
     },
     data() {
       return {
-        serviceNote: '', //Input polje za service note
+        serviceNote: '',
+        successMessage: '',
       };
     },
     methods: {
       async saveServiceNote() {
-        try {
-        
-          console.log('Spremanje service note-a');
-        
-          //Updateaj Firestore sa service note-om
-          await db.collection('guarantees').doc(this.guarantee.id).update({
-            serviceNote: this.serviceNote,
-          });
-          console.log('Servicenote SPREMLJEN!!');
+  try {
+    console.log('Spremanje service note-a');
+    console.log('GARANCIJA provjera:', this.guarantee.name);
 
-          //Ocisti input polje
-          this.serviceNote = '';
-  
-          // You can also emit an event to notify the parent component
-          // that the service note has been added.
-          this.$emit('serviceNoteAdded');
-  
-        } catch (error) {
-          console.error('Error saving service note:', error);
-        }
-      },
+    if (this.guarantee && typeof this.serviceNote === 'string') { //Provjera ako je this.serviceNote string
+      const guaranteeRef = db.collection('guarantees').doc(this.guarantee.id);
+      await guaranteeRef.update({
+        serviceNote: this.serviceNote,
+      });
+      console.log('Service note added to Firestore document.');
+      this.successMessage = 'Service note added successfully'; //spremi poruku za prikaz korisniku
+      this.$emit('serviceNoteAdded'); //Emitaj event da serviceNote nije dodan
+
+      this.serviceNote = ''; //ocisti input field
+
+    } else {
+      console.error('Invalid guarantee or service note.');
+    }
+  } catch (error) {
+    console.error('Error saving service note:', error);
+  }
+},
+
     },
   };
   </script>
-  
