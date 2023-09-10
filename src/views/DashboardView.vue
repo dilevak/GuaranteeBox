@@ -7,7 +7,7 @@
   </div>
   <div class="dashboard-view">
     <Slide noOverlay>
-      <a id="home" href="#">About</a>
+      <router-link to="/about" id="home">About</router-link>
       <a href="#" @click="openAddForm">Add New</a>
       <a href="#" @click="logout()">Logout</a>
     </Slide>

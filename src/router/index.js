@@ -5,6 +5,7 @@ import SignupView from '../views/SignupView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import store from '@/store';
 import { firebase } from '@/firebase';
+import AboutView from '../views/AboutView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     meta:{
       needsUser: true
     }
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutView
   }
 ]
 
