@@ -76,6 +76,7 @@ export default {
           guaranteePicture: guaranteePictureURL,
           receiptPicture: receiptPictureURL,
           userId: user.uid,
+          serviceNote: null, //serviceNote postavljamo na null
         });
 
         //ID dodanog dokumenta

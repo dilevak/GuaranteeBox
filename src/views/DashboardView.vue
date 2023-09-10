@@ -33,14 +33,22 @@
   </div>
   <!--Popup prozor koji se otvara nakon klika na garanciju sa slikama garancije i racuna-->
   <div class="popup-details" v-if="isPopupOpen">
-    <div class="popup-content">
-      <h3>{{ selectedGuarantee.name }}</h3>
-      <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
-      <div class="popup-images">
-        <img v-if="selectedGuarantee.guaranteePicture" :src="selectedGuarantee.guaranteePicture" alt="Guarantee Picture">
-        <img v-if="selectedGuarantee.receiptPicture" :src="selectedGuarantee.receiptPicture" alt="Receipt Picture">
-      </div>
-      <button @click="closePopup">Close</button>
+  <div class="popup-content">
+    <h3>{{ selectedGuarantee.name }}</h3>
+    <p>Expiration Date: {{ selectedGuarantee.expireDate }}</p>
+    <div class="popup-images">
+      <img v-if="selectedGuarantee.guaranteePicture" :src="selectedGuarantee.guaranteePicture" alt="Guarantee Picture">
+      <img v-if="selectedGuarantee.receiptPicture" :src="selectedGuarantee.receiptPicture" alt="Receipt Picture">
+    </div>
+    <!--Input polje za service note-->
+    <div class="service-note">
+    <h4>Service Note:</h4>
+    <textarea v-model="serviceNote"></textarea>
+    </div>
+    <!-- AddServiceNote botun -->
+    <button @click="addServiceNote">Add Service Note</button>
+
+    <button @click="closePopup">Close</button>
       <!--Delete botun-->
       <DeleteGuarantee @deleteClicked="openDeleteDialog(item)"/>
     </div>
@@ -81,6 +89,12 @@ export default {
 },
 
   methods: {
+    addServiceNote() {
+    console.log('POZVANA je metoda addServiceNote');
+    if (this.selectedGuarantee) {
+      this.selectedGuarantee.serviceNote = this.serviceNote; //Updateaj serviceNote za selectedguarantee
+    }
+  },
 
     deleteConfirmed() {
     //Brisanje garancije
